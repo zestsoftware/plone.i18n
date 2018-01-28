@@ -18,6 +18,7 @@ from zope.component.hooks import getSite
 from zope.globalrequest import getRequest
 from zope.interface import implementer
 
+
 try:
     from Products.PlacelessTranslationService.Negotiator import registerLangPrefsMethod  # noqa
     _hasPTS = 1
