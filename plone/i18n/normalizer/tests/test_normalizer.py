@@ -89,13 +89,13 @@ def testLocaleAwareIDNormalizer():
       'simpleandsafe'
 
       >>> util.normalize(utf8unicode('text with umläut'), locale='de')
-      'text-with-umlaeut'
+      'text-with-umlaut'
 
     Make sure we get the de normalizer as there's no special one for de-DE
     registered.
 
       >>> util.normalize(utf8unicode('text with umläut'), locale='de-DE')
-      'text-with-umlaeut'
+      'text-with-umlaut'
 
       >>> util.normalize(u'simpleandsafe', locale='pt-BR')
       'simpleandsafe'
@@ -113,7 +113,7 @@ def testLocaleAwareIDNormalizer():
     for backwards-compatibility with an earlier version of plone.i18n.
 
       >>> util.normalize(utf8unicode('text with umläut'), locale='de_DE')
-      'text-with-umlaeut'
+      'text-with-umlaut'
 
     """
 

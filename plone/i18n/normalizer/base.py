@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from unicodedata import decomposition
 from unicodedata import normalize
+from unidecode import unidecode
 
 import six
 import string
@@ -21,17 +22,7 @@ def mapUnicode(text, mapping=()):
     This method is used for replacement of special characters found in a
     mapping before baseNormalize is applied.
     """
-    res = u''
-    for ch in text:
-        ordinal = ord(ch)
-        if ordinal in mapping:
-            # try to apply custom mappings
-            res += mapping.get(ordinal)
-        else:
-            # else leave untouched
-            res += ch
-    # always apply base normalization
-    return baseNormalize(res)
+    return baseNormalize(text)
 
 
 def baseNormalize(text):
@@ -58,50 +49,4 @@ def baseNormalize(text):
         return repr(text)
 
     text = text.strip()
-
-    res = []
-    for ch in text:
-        if ch in allowed:
-            # ASCII chars, digits etc. stay untouched
-            res.append(ch)
-        else:
-            ordinal = ord(ch)
-            if ordinal < UNIDECODE_LIMIT:
-                h = ordinal >> 8
-                l = ordinal & 0xff
-
-                c = CHAR.get(h, None)
-
-                if c == None:
-                    try:
-                        mod = __import__('unidecode.x%02x'%(h), [], [], ['data'])
-                    except ImportError:
-                        CHAR[h] = NULLMAP
-                        res.append('')
-                        continue
-
-                    CHAR[h] = mod.data
-
-                    try:
-                        res.append( mod.data[l] )
-                    except IndexError:
-                        res.append('')
-                else:
-                    try:
-                        res.append( c[l] )
-                    except IndexError:
-                        res.append('')
-
-            elif decomposition(ch):
-                normalized = normalize('NFKD', ch).strip()
-                # string may contain non-letter chars too. Remove them
-                # string may result to more than one char
-                res.append(''.join([c for c in normalized if c in allowed]))
-
-            else:
-                # hex string instead of unknown char
-                res.append("%x" % ordinal)
-
-    if six.PY2:
-        return ''.join(res).encode('ascii')
-    return ''.join(res)
+    return unidecode(text).encode('ascii')
