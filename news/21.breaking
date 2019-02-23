@@ -1,0 +1,3 @@
+Make it work with the newest Unidecode 1.0.22. Use its method instead of duplicating it in here.
+Also support newer unicode chars, like with `Bei Jing` in the example.
+[gogobd, jensens]

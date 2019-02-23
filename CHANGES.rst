@@ -1,22 +1,40 @@
 Changelog
 =========
 
-4.0.1 (unreleased)
+.. You should *NOT* be adding new change log entries to this file.
+   You should create a file in the news directory instead.
+   For helpful instructions, please see:
+   https://github.com/plone/plone.releaser/blob/master/ADD-A-NEWS-ITEM.rst
+
+.. towncrier release notes start
+
+4.0.3 (2019-02-13)
 ------------------
-
-Breaking changes:
-
-- *add item here*
-
-New features:
-
-- *add item here*
 
 Bug fixes:
 
-- Make it work with newwest Unidecode 1.0.22. Use its method instaed of duplicating it in here.
-  Also support newer unicode chars, like with `Bei Jing` in the example.
-  [gogobd, jensens]
+
+- Be more verbose when Japanese normalizer fails in tests. Test that the length
+  of the returned string is lower but not always equal to the given max_length.
+  Changed tested string. (#25)
+
+
+4.0.2 (2018-12-11)
+------------------
+
+Bug fixes:
+
+- Code and test cleanuo.
+  [jensens]
+
+
+4.0.1 (2018-10-31)
+------------------
+
+Bug fixes:
+
+- Fix py3 tests and functionality
+  [pbauer]
 
 
 4.0.0 (2018-02-02)

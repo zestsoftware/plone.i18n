@@ -2,6 +2,8 @@
 from zope.i18n.interfaces import IUserPreferredLanguages
 from zope.interface import implementer
 
+import operator
+
 
 # this is the negotiator from old PlacelessTranslationService
 # may be cleaned up in future
@@ -17,7 +19,7 @@ def getAcceptedHelper(self, request, kind='language'):
 
 def registerLangPrefsMethod(prefs, kind='language'):
     # check for correct format of prefs
-    if not  isinstance(prefs, dict):
+    if not isinstance(prefs, dict):
         prefs = {'klass': prefs, 'priority': 0}
     # add chain for kind
     if kind not in _langPrefsRegistry:
@@ -29,7 +31,7 @@ def registerLangPrefsMethod(prefs, kind='language'):
     _langPrefsRegistry[kind].append(prefs)
     # sort by priority
     _langPrefsRegistry[kind].sort(
-        lambda x, y: cmp(y['priority'], x['priority'])
+        key=operator.itemgetter('priority'), reverse=True
     )
 
 
@@ -97,9 +99,9 @@ class BrowserAccept(object):
         http_accepts = request.get(header_name, '')
 
         if (
-            user_accepts and
-            http_accepts and
-            user_accepts == request.cookies.get('custom_name')
+            user_accepts
+            and http_accepts
+            and user_accepts == request.cookies.get('custom_name')
         ):
             user_accepts = [a.strip() for a in user_accepts.split(',')]
             http_accepts = [a.strip() for a in http_accepts.split(',')]
@@ -168,7 +170,7 @@ class CookieAccept(object):
             else:
                 # filter
                 for filter in self.filters:
-                    language = filter(language)
+                    language = list(filter(language))
                 return (language,)
         else:
             return ()
@@ -193,26 +195,16 @@ def setCookieLanguage(request, lang, REQUEST=None):
 # higher number = higher priority
 # if a acceptor returns a false value (() or None) then the next acceptor
 # in the chain is queried
+registerLangPrefsMethod({'klass': BrowserAccept, 'priority': 10}, 'language')
+registerLangPrefsMethod({'klass': CookieAccept, 'priority': 40}, 'language')
 registerLangPrefsMethod(
-    {'klass': BrowserAccept, 'priority': 10},
-    'language'
-)
-registerLangPrefsMethod(
-    {'klass': CookieAccept, 'priority': 40},
-    'language'
-)
-registerLangPrefsMethod(
-    {'klass': BrowserAccept, 'priority': 10},
-    'content-type'
+    {'klass': BrowserAccept, 'priority': 10}, 'content-type'
 )
 
 
 class Negotiator(object):
 
-    tests = {
-        'content-type': type_accepted,
-        'language': lang_accepted,
-    }
+    tests = {'content-type': type_accepted, 'language': lang_accepted}
 
     def negotiate(self, choices, request, kind='content-type'):
         choices = tuple(choices)
