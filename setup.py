@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '4.0.5.dev0'
+version = '4.0.6.dev0'
 
 setup(
     name='plone.i18n',
@@ -9,6 +9,7 @@ setup(
     long_description=(open("README.rst").read() + "\n" +
                       open("CHANGES.rst").read()),
     classifiers=[
+        "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Plone",
         "Framework :: Plone :: 5.2",
