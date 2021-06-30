@@ -469,8 +469,8 @@ _languagelist = {
         u'flag': u'/++resource++country-flags/al.gif',
     },
     u'sr': {
-        u'native': 'српски',
-        u'name': 'Serbian',
+        u'native': 'Srpski',
+        u'name': 'Serbian (Latin)',
         u'flag': u'/++resource++country-flags/cs.gif',
     },
     u'ss': {u'native': 'SiSwati', u'name': 'Swati'},
